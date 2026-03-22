@@ -1,0 +1,103 @@
+{
+  "name": "project-zomboid",
+  "display_name": "Project Zomboid",
+  "description": "Isometric zombie survival game with multiplayer",
+  "resources": {
+    "cpu": "1",
+    "memory": "2Gi", 
+    "storage": "5Gi",
+    "min_cpu": "500m",
+    "min_memory": "1Gi"
+  },
+  "network": {
+    "ports": [
+      {
+        "port": 16261,
+        "protocol": "UDP",
+        "name": "game-port"
+      },
+      {
+        "port": 16262,
+        "protocol": "UDP",
+        "name": "steam-port"
+      }
+    ]
+  },
+  "settings": {
+    "max_players": {
+      "type": "int",
+      "default": 16,
+      "description": "Maximum number of players",
+      "required": false,
+      "min": 1,
+      "max": 64
+    },
+    "server_password": {
+      "type": "string",
+      "default": "",
+      "description": "Server password (empty for no password)",
+      "required": false
+    },
+    "server_name": {
+      "type": "string",
+      "default": "Project Zomboid Server",
+      "description": "Server name displayed in browser",
+      "required": true
+    },
+    "public_server": {
+      "type": "bool",
+      "default": false,
+      "description": "Make server visible in public server list",
+      "required": false
+    },
+    "pvp": {
+      "type": "bool",
+      "default": false,
+      "description": "Enable PvP combat",
+      "required": false
+    },
+    "pause_empty": {
+      "type": "bool",
+      "default": true,
+      "description": "Pause when no players are connected",
+      "required": false
+    },
+    "save_world_every_minutes": {
+      "type": "int",
+      "default": 5,
+      "description": "Save world every X minutes",
+      "required": false,
+      "min": 1,
+      "max": 60
+    },
+    "admin_password": {
+      "type": "string",
+      "default": "",
+      "description": "Admin password for server management",
+      "required": false
+    }
+  },
+  "helm_chart": {
+    "chart": "project-zomboid-server",
+    "repository": "https://charts.indiffbrocolis.com",
+    "version": "latest",
+    "values": {
+      "image": {
+        "repository": "renegademaster/zomboid-dedicated-server",
+        "tag": "latest"
+      },
+      "persistence": {
+        "enabled": true,
+        "size": "5Gi"
+      }
+    }
+  },
+  "volumes": [
+    {
+      "name": "zomboid-data",
+      "mount_path": "/home/steam/Zomboid",
+      "size": "5Gi",
+      "type": "pvc"
+    }
+  ]
+}
